@@ -1,20 +1,16 @@
-name: Merge me!
-
-on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'CI'
-
 jobs:
   merge-me:
     name: Merge me!
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        name: Merge me!
-        uses: ridedott/merge-me-action@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.DEPENDABOT_AUTO_MERGE }}
-          ENABLE_GITHUB_API_PREVIEW: true
+    - continue-on-error: true
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      name: Merge me!
+      uses: ridedott/merge-me-action@v2
+      with:
+        ENABLE_GITHUB_API_PREVIEW: true
+        GITHUB_TOKEN: ${{ secrets.DEPENDABOT_AUTO_MERGE }}
+name: Merge me!
+on:
+  repository_dispatch:
+    types: trigger-ga___merge-me.yml
